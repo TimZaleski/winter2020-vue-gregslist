@@ -1,70 +1,82 @@
 <template>
-  <div class="cars-page container-fluid">
+  <div class="houses-page container-fluid">
     <div class="row">
       <div class="col text-center">
-        <h1><img alt="Vue logo" src="../assets/logo.png" class="logoCar" />ars</h1>
+        <h1>Ho<img alt="Vue logo" src="../assets/logo.png" class="logoHouse" />ses</h1>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <form @submit.prevent="createCar">
+        <form @submit.prevent="createHouse">
           <div class="form-group-inline">
-            <label for="make">Make</label>
+            <label for="bedrooms">Bedrooms</label>
             <input
-              type="text"
-              name="make"
-              id="make"
-              v-model="state.newCar.make"
+              type="number"
+              name="bedrooms"
+              id="bedrooms"
+              v-model="state.newHouse.bedrooms"
               class="form-control"
-              placeholder="Make..."
+              placeholder="Bedrooms..."
               aria-describedby="helpId"
             />
           </div>
           <div class="form-group-inline">
-            <label for="model">model</label>
+            <label for="bathrooms">Bathrooms</label>
             <input
-              type="text"
-              name="model"
-              id="model"
-              v-model="state.newCar.model"
+              type="number"
+              name="bathrooms"
+              id="bathrooms"
+              v-model="state.newHouse.bathrooms"
               class="form-control"
-              placeholder="model..."
+              placeholder="Bathrooms..."
+              aria-describedby="helpId"
+            />
+          </div>
+           <div class="form-group-inline">
+            <label for="levels">Levels</label>
+            <input
+              type="number"
+              name="levels"
+              id="levels"
+              v-model="state.newHouse.levels"
+              class="form-control"
+              placeholder="Levels..."
               aria-describedby="helpId"
             />
           </div>
           <div class="form-group-inline">
-            <label for="year">year</label>
+            <label for="year">Year</label>
             <input
               type="number"
               name="year"
               id="year"
-              v-model="state.newCar.year"
+              v-model="state.newHouse.year"
               class="form-control"
-              placeholder="year..."
+              placeholder="Year..."
               aria-describedby="helpId"
             />
           </div>
           <div class="form-group-inline">
-            <label for="price">price</label>
+            <label for="price">Price</label>
             <input
               type="number"
               name="price"
               id="price"
-              v-model="state.newCar.price"
+              v-model="state.newHouse.price"
               class="form-control"
-              placeholder="price..."
+              placeholder="Price..."
               aria-describedby="helpId"
             />
           </div>
           <div class="form-group-inline">
-            <label for="description">description</label>
+            <label for="description">Description</label>
             <input
               type="text"
               name="description"
               id="description"
-              v-model="state.newCar.description"
+              v-model="state.newHouse.description"
               class="form-control"
-              placeholder="description..."
+              placeholder="Description..."
               aria-describedby="helpId"
             />
           </div>
@@ -74,41 +86,41 @@
               type="text"
               name="imgUrl"
               id="imgUrl"
-              v-model="state.newCar.imgUrl"
+              v-model="state.newHouse.imgUrl"
               class="form-control"
               placeholder="imgUrl..."
               aria-describedby="helpId"
             />
           </div>
-          <button type="submit" class="btn btn-success">Add Car</button>
+          <button type="submit" class="btn btn-success">Add House</button>
         </form>
       </div>
     </div>
     <div class="row">
-      <Car v-for="car in cars" :key="car.id" :car="car" />
+      <House v-for="house in houses" :key="house.id" :house="house" />
     </div>
   </div>
 </template>
 
 <script>
 import { computed, onMounted, reactive } from 'vue'
-import { carsService } from '../services/CarsService'
+import { housesService } from '../services/HousesService'
 import { AppState } from '../AppState'
-import Car from '../components/Car.vue'
+import House from '../components/House.vue'
 import { useRouter } from 'vue-router'
 
 export default {
-  name: 'CarsPage',
+  name: 'HousesPage',
   setup() {
     const router = useRouter()
     const state = reactive({
-      newCar: {}
+      newHouse: {}
     })
 
     // NOTE on mounted gets called when the page is first mounted to the dom (similar to constructors)
     onMounted(() => {
       try {
-        carsService.getCars()
+        housesService.getHouses()
       } catch (error) {
         console.error(error)
       }
@@ -116,14 +128,14 @@ export default {
     return {
       state,
       // if data changes dynimcally in the appstate use a computed
-      cars: computed(() => AppState.cars),
+      houses: computed(() => AppState.houses),
 
-      async createCar() {
+      async createHouse() {
         try {
-          const id = await carsService.create(state.newCar)
-          state.newCar = {}
+          const id = await housesService.create(state.newHouse)
+          state.newHouse = {}
           // change route in javascript using router.push()
-          router.push({ name: 'CarDetails', params: { id } })
+          router.push({ name: 'HouseDetails', params: { id } })
         } catch (error) {
           console.error(error)
         }
@@ -132,14 +144,13 @@ export default {
     }
   },
   components: {
-    Car
+    House
   }
 }
 </script>
 
 <style lang="scss">
-  .logoCar {
-   transform: rotateZ(90deg);
+  .logoHouse {
    height: 1em
   }
 </style>

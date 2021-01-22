@@ -4,6 +4,12 @@
       <router-link :to="{ name: 'Cars' }" class="nav-item nav-link active">
         Cars
       </router-link>
+      <router-link :to="{ name: 'Houses' }" class="nav-item nav-link active">
+        Houses
+      </router-link>
+      <router-link :to="{ name: 'Jobs' }" class="nav-item nav-link active">
+        Jobs
+      </router-link>
       <!-- <router-link class="nav-item nav-link" :to="{ name: 'About' }">
         About
       </router-link> -->

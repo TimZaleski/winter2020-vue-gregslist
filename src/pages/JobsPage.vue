@@ -1,114 +1,103 @@
 <template>
-  <div class="cars-page container-fluid">
+  <div class="jobs-page container-fluid">
     <div class="row">
       <div class="col text-center">
-        <h1><img alt="Vue logo" src="../assets/logo.png" class="logoCar" />ars</h1>
+        <h1><img alt="Vue logo" src="../assets/logo.png" class="logoJob" />ery Cool Jobs</h1>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <form @submit.prevent="createCar">
+        <form @submit.prevent="createJob">
           <div class="form-group-inline">
-            <label for="make">Make</label>
+            <label for="company">Company</label>
             <input
               type="text"
-              name="make"
-              id="make"
-              v-model="state.newCar.make"
+              name="company"
+              id="company"
+              v-model="state.newJob.company"
               class="form-control"
-              placeholder="Make..."
+              placeholder="Company..."
               aria-describedby="helpId"
             />
           </div>
           <div class="form-group-inline">
-            <label for="model">model</label>
+            <label for="jobTitle">Title</label>
             <input
               type="text"
-              name="model"
-              id="model"
-              v-model="state.newCar.model"
+              name="jobTitle"
+              id="jobTitle"
+              v-model="state.newJob.jobTitle"
               class="form-control"
-              placeholder="model..."
+              placeholder="Title..."
               aria-describedby="helpId"
             />
           </div>
+
           <div class="form-group-inline">
-            <label for="year">year</label>
+            <label for="hours">Hours</label>
             <input
               type="number"
-              name="year"
-              id="year"
-              v-model="state.newCar.year"
+              name="hours"
+              id="hours"
+              v-model="state.newJob.hours"
               class="form-control"
-              placeholder="year..."
+              placeholder="Hours..."
               aria-describedby="helpId"
             />
           </div>
           <div class="form-group-inline">
-            <label for="price">price</label>
+            <label for="rate">Rate</label>
             <input
               type="number"
-              name="price"
-              id="price"
-              v-model="state.newCar.price"
+              name="rate"
+              id="rate"
+              v-model="state.newJob.rate"
               class="form-control"
-              placeholder="price..."
+              placeholder="Rate..."
               aria-describedby="helpId"
             />
           </div>
           <div class="form-group-inline">
-            <label for="description">description</label>
+            <label for="description">Description</label>
             <input
               type="text"
               name="description"
               id="description"
-              v-model="state.newCar.description"
+              v-model="state.newJob.description"
               class="form-control"
-              placeholder="description..."
+              placeholder="Description..."
               aria-describedby="helpId"
             />
           </div>
-          <div class="form-group-inline">
-            <label for="imgUrl">imgUrl</label>
-            <input
-              type="text"
-              name="imgUrl"
-              id="imgUrl"
-              v-model="state.newCar.imgUrl"
-              class="form-control"
-              placeholder="imgUrl..."
-              aria-describedby="helpId"
-            />
-          </div>
-          <button type="submit" class="btn btn-success">Add Car</button>
+          <button type="submit" class="btn btn-success">Add Job</button>
         </form>
       </div>
     </div>
     <div class="row">
-      <Car v-for="car in cars" :key="car.id" :car="car" />
+      <Job v-for="job in jobs" :key="job.id" :job="job" />
     </div>
   </div>
 </template>
 
 <script>
 import { computed, onMounted, reactive } from 'vue'
-import { carsService } from '../services/CarsService'
+import { jobsService } from '../services/JobsService'
 import { AppState } from '../AppState'
-import Car from '../components/Car.vue'
+import Job from '../components/Job.vue'
 import { useRouter } from 'vue-router'
 
 export default {
-  name: 'CarsPage',
+  name: 'JobsPage',
   setup() {
     const router = useRouter()
     const state = reactive({
-      newCar: {}
+      newJob: {}
     })
 
     // NOTE on mounted gets called when the page is first mounted to the dom (similar to constructors)
     onMounted(() => {
       try {
-        carsService.getCars()
+        jobsService.getJobs()
       } catch (error) {
         console.error(error)
       }
@@ -116,14 +105,14 @@ export default {
     return {
       state,
       // if data changes dynimcally in the appstate use a computed
-      cars: computed(() => AppState.cars),
+      jobs: computed(() => AppState.jobs),
 
-      async createCar() {
+      async createJob() {
         try {
-          const id = await carsService.create(state.newCar)
-          state.newCar = {}
+          const id = await jobsService.create(state.newJob)
+          state.newJob = {}
           // change route in javascript using router.push()
-          router.push({ name: 'CarDetails', params: { id } })
+          router.push({ name: 'JobDetails', params: { id } })
         } catch (error) {
           console.error(error)
         }
@@ -132,14 +121,13 @@ export default {
     }
   },
   components: {
-    Car
+    Job
   }
 }
 </script>
 
 <style lang="scss">
-  .logoCar {
-   transform: rotateZ(90deg);
+  .logoJob {
    height: 1em
   }
 </style>
